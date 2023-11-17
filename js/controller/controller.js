@@ -1,8 +1,21 @@
-import {setInner,addChild } from "https://jscroot.github.io/element/croot.js";
+import {setInner,addChild, getValue } from "https://jscroot.github.io/element/croot.js";
+import { setCookieWithExpireHour } from 'https://jscroot.github.io/cookie/croot.js';
 import {tableTemplate, tableRowClass, tableTag} from "../template/template.js";
 import {map} from '../config/configpeta.js';
 import Draw from 'https://cdn.skypack.dev/ol/interaction/Draw.js';
 
+export function getTokenFromAPI() {
+    const tokenUrl = "https://asia-southeast2-gilartest.cloudfunctions.net/zlogingis";
+    fetch(tokenUrl)
+      .then(response => response.json())
+      .then(tokenData => {
+        if (tokenData.token) {
+          userToken = tokenData.token;
+          console.log('Token dari API:', userToken);
+        }
+      })
+      .catch(error => console.error('Gagal mengambil token:', error));
+  }
 
 export function isiRowPoint(value){
     if (value.geometry.type === "Point") {
@@ -42,12 +55,10 @@ export function MakeGeojsonFromAPI(value) {
 
     const link = document.createElement("a");
     link.href = url;
-    // link.download = fileName || "data.geojson"; 
-
-    // document.body.appendChild(link);
 
     return link;
 }
+
 export function drawer(geojson) {
     const source = new ol.source.Vector({
         wrapx: false
@@ -105,14 +116,8 @@ export function AddLayerToMAP(geojson){
     const Sourcedata = new ol.source.Vector({
         url: geojson,
         format: new ol.format.GeoJSON(),
+        // wrapx : false
       });
-
-    const geojsonFeatureCollection = {
-        type: "FeatureCollection",
-        features: Sourcedata
-    };
-
-    console.log(geojsonFeatureCollection)
 
     //buat layer untuk point, polygon, dan polyline
     const layerpoint = new ol.layer.Vector({
@@ -130,8 +135,6 @@ export function AddLayerToMAP(geojson){
         source: Sourcedata,
         style: function (feature) {
             const featureType = feature.getGeometry().getType();
-            
-           
             if (featureType === 'Polygon') {
                 return new ol.style.Style({
                     stroke: new ol.style.Stroke({
@@ -152,12 +155,64 @@ export function AddLayerToMAP(geojson){
     });
 
     map.addLayer(polylayer);
-    map.addLayer(layerpoint);}
+    map.addLayer(layerpoint);
+    // drawer(Sourcedata)
+    
+}
+
 
 export function responseData(results){
     // console.log(results.features);
     // console.log(MakeGeojsonFromAPI(results))
+    // Addlayer()
     results.forEach(isiRowPoint);
     results.forEach(isiRowPolygon);
     results.forEach(isiRowPolyline);
+}
+
+export function ResponsePostLogin(response) {
+    if (response && response.token) {
+      console.log('Token User:', response.token);
+      setCookieWithExpireHour('Login', response.token, 3);
+      window.location.href = 'https://gis5larya.github.io/';
+      alert("Selamat Datang")
+    } else {
+      alert('Login gagal. Silakan coba lagi.');
+    }
+  }
+
+  export function ResponseLogin(result) {
+    ResponsePostLogin(result)
+  }
+
+export function PostLogin() {
+    const username = getValue("username");
+    const password = getValue("password");
+  
+    const data = {
+      username: username,
+      password: password
+    };
+    return data;
+  }
+
+  export function GetDataForm(){
+    const username = getValue("username");
+    const password = getValue("password");
+    console.log(password)
+
+    const data = {
+        username: username,
+        password: password
+    };
+    return data
+}
+
+export function AlertPost(value){
+    alert(value.message + "\nRegistrasi Berhasil")
+    window.location.href= "login.html"
+}
+
+export function ResponsePost(result) {
+    AlertPost(result);
 }
