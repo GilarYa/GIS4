@@ -19,8 +19,6 @@ export function onDeleteMarkerClick() {
 }
 
 export function onSubmitMarkerClick() {
-  let y = getValue('y');
-  let x = getValue('x');
   let long = getValue('long');
   let lat = getValue('lat');
   let name = getValue('name');
@@ -31,13 +29,13 @@ export function onSubmitMarkerClick() {
       "name" : name,
       "volume" : volume,
       "coordinates" : [
-        parseFloat(long),parseFloat(lat),parseFloat(x),parseFloat(y)
+        parseFloat(long),parseFloat(lat)
       ]
     };
     postWithToken(urlPostGCF,"Token","dsf9ygf87h98u479y98dj0fs89nfd7",data,afterSubmitCOG);
   overlay.setPosition(undefined);
   textBlur('popup-closer');
-    insertMarker(name,long,lat,volume,x,y);
+    insertMarker(name,long,lat,volume);
     idmarker.id=idmarker.id+1;
   console.log(name)
 
@@ -55,8 +53,6 @@ function popupInputMarker(evt) {
     setInner('popup-content',msg);
     setValue('long',coordinate[0]);
     setValue('lat',coordinate[1]);
-    setValue('x',coordinate[2]);
-    setValue('y',coordinate[3]);
     overlay.setPosition(tile);
 }
 

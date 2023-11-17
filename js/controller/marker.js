@@ -6,13 +6,13 @@ import {fromLonLat} from 'https://cdn.skypack.dev/ol/proj.js';
 import {Icon, Style} from 'https://cdn.skypack.dev/ol/style.js';
 import {map,idmarker} from '../config/configpeta.js';
 
-export function insertMarker(name,long,lat,volume,x,y){
+export function insertMarker(name,long,lat,volume){
     let marker = new Feature({
         type: 'icon',
         id : idmarker.id,
         name : name,
         volume : volume,
-        geometry: new Point(fromLonLat([long, lat,x,y])),
+        geometry: new Point(fromLonLat([long, lat])),
     });
     marker.setStyle(
         new Style({
