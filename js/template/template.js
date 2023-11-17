@@ -1,7 +1,7 @@
 import {getCookie} from "https://jscroot.github.io/cookie/croot.js";
 
 export let URLGeoJson = "https://asia-southeast2-gilartest.cloudfunctions.net/gilarch3";
-export let urlPostGCF = "https://asia-southeast2-gilartest.cloudfunctions.net/larcbgis4";
+export let urlPostGCF = "https://asia-southeast2-gilartest.cloudfunctions.net/larcbgis4v2";
 export let UrlLogin = "https://asia-southeast2-gilartest.cloudfunctions.net/zlogingis"
 export let UrlRegister = "https://asia-southeast2-gilartest.cloudfunctions.net/zregisgis"
 export let tableTag = "tr";
